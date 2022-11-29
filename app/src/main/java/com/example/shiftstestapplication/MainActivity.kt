@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.shiftstestapplication.ui.shiftsList.ShiftsListScreen
 import com.example.shiftstestapplication.ui.theme.ShiftsTestApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.scopes.ActivityScoped
@@ -30,7 +31,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    ShiftHome("Android")
+                    ShiftHome()
                 }
             }
         }
@@ -38,14 +39,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ShiftHome(name: String) {
+fun ShiftHome() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
         startDestination = "shift_list_screen"
     ) {
         composable(route = "shift_list_screen") {
-
+            ShiftsListScreen(navController = navController)
         }
         composable(
             route = "create_shift_screen",
@@ -67,6 +68,6 @@ fun ShiftHome(name: String) {
 @Composable
 fun DefaultPreview() {
     ShiftsTestApplicationTheme {
-        ShiftHome("Android")
+        ShiftHome()
     }
 }

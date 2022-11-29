@@ -14,5 +14,5 @@ interface ShiftUsecase {
 
     suspend fun delete(item: ShiftItems)
 
-    suspend fun getShifts(): Flow<List<Shift>>
+    suspend fun getShifts(): List<ShiftItems>
 }

@@ -19,7 +19,6 @@ import javax.inject.Inject
  * Created by Gideon Olarewaju on 29/11/2022.
  */
 
-@ActivityScoped
 class ShiftsUsecaseImpl @Inject constructor(
     private val repository: ShiftsRepository
 ) : ShiftUsecase {
@@ -32,8 +31,7 @@ class ShiftsUsecaseImpl @Inject constructor(
         repository.delete(item)
     }
 
-    override suspend fun getShifts(): Flow<List<Shift>> = flow {
-        repository.getShifts()
+    override suspend fun getShifts(): List<ShiftItems> {
+       return repository.getShifts()
     }
-
 }
