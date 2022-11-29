@@ -1,6 +1,5 @@
 package com.example.shiftstestapplication.data.dataSource
 
-import com.google.gson.JsonObject
 
 /**
  * Created by Gideon Olarewaju on 29/11/2022.
