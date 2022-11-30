@@ -30,7 +30,7 @@ class ShiftsRepository @Inject constructor(
         return db.shiftsDao().getAllShiftItems()
     }
 
-    private fun mapShifts() {
+    fun mapShifts() {
         response.shifts.map {
             db.shiftsDao().upsert(
                 item = ShiftItems(

@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Created by Gideon Olarewaju on 29/11/2022.
  */
-interface ShiftUsecase {
+interface ShiftRepository {
     suspend fun upsert(item: ShiftItems)
 
     suspend fun delete(item: ShiftItems)
 
-    suspend fun getShifts(): List<ShiftItems>
+    suspend fun getShifts(): Flow<List<Shift>>
 }

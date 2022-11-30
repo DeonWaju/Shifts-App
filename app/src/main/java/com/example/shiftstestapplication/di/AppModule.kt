@@ -6,7 +6,7 @@ import com.example.shiftstestapplication.data.db.ShiftsDao
 import com.example.shiftstestapplication.data.db.ShiftsDatabase
 import com.example.shiftstestapplication.data.repository.ShiftsRepository
 import com.example.shiftstestapplication.domain.implementation.ShiftsUsecaseImpl
-import com.example.shiftstestapplication.domain.usecase.ShiftUsecase
+import com.example.shiftstestapplication.domain.usecase.ShiftRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +26,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideShiftImpl(shiftsRepository: ShiftsRepository): ShiftUsecase = ShiftsUsecaseImpl(shiftsRepository)
+    fun provideShiftImpl(shiftsRepository: ShiftsRepository): ShiftRepository = ShiftsUsecaseImpl(shiftsRepository)
 
 
     @Provides

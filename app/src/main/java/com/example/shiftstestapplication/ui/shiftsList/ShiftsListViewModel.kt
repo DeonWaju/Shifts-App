@@ -3,12 +3,14 @@ package com.example.shiftstestapplication.ui.shiftsList
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.shiftstestapplication.data.db.entities.ShiftItems
 import com.example.shiftstestapplication.data.responses.Shift
-import com.example.shiftstestapplication.domain.usecase.ShiftUsecase
+import com.example.shiftstestapplication.domain.usecase.FilterShiftsUseCase
+import com.example.shiftstestapplication.domain.usecase.ShiftRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ShiftsListViewModel @Inject constructor(
-    private val shiftUsecase: ShiftUsecase,
+    private val filterShiftsUseCase: FilterShiftsUseCase,
     private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
@@ -26,17 +28,16 @@ class ShiftsListViewModel @Inject constructor(
         getLists()
     }
 
-    var shiftList = mutableStateOf<List<ShiftItems>>(listOf())
-    private var cachedShiftList = listOf<ShiftItems>()
+    private val _uiState = MutableStateFlow(emptyList<Shift>())
+    val uiState: StateFlow<List<Shift>> = _uiState.asStateFlow()
+
+//    var shiftList = mutableStateOf<List<Shift>>(listOf())
+//    var cachedShiftList = listOf<Shift>()
+//
 
     fun getLists() {
         viewModelScope.launch(dispatcher) {
-            val list = shiftUsecase.getShifts()
-
-            cachedShiftList = list
-            shiftList.value = list
-
-
+            _uiState.value = filterShiftsUseCase.getShifts()
         }
     }
 
