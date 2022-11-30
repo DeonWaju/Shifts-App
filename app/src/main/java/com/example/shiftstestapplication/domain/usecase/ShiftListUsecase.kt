@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Created by Gideon Olarewaju on 29/11/2022.
  */
-interface ShiftRepository {
+interface ShiftListUsecase {
     suspend fun upsert(item: ShiftItems)
 
     suspend fun delete(item: ShiftItems)

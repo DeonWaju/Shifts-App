@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.shiftstestapplication.ui.addShift.AddShiftScreen
 import com.example.shiftstestapplication.ui.shiftsList.ShiftsListScreen
 import com.example.shiftstestapplication.ui.theme.ShiftsTestApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,26 +49,8 @@ fun ShiftHome() {
         composable(route = "shift_list_screen") {
             ShiftsListScreen(navController = navController)
         }
-        composable(
-            route = "create_shift_screen",
-            arguments = listOf(
-                navArgument("dominantColor") {
-                    type = NavType.IntType
-                },
-                navArgument("pokemonName") {
-                    type = NavType.StringType
-                }
-            )
-        ) {
-
+        composable(route = "add_shift_screen") {
+            AddShiftScreen(navController = navController)
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ShiftsTestApplicationTheme {
-        ShiftHome()
     }
 }

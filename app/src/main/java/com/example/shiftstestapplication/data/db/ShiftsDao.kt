@@ -13,6 +13,9 @@ interface ShiftsDao {
     @Delete
     fun delete(item: ShiftItems)
 
+    @Query("DELETE FROM ShiftItems")
+    fun deleteAll()
+
     @Query("SELECT * FROM ShiftItems")
     fun getAllShiftItems(): List<ShiftItems>
 

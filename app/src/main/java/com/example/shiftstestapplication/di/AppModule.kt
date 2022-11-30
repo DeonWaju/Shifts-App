@@ -5,8 +5,10 @@ import androidx.room.Room
 import com.example.shiftstestapplication.data.db.ShiftsDao
 import com.example.shiftstestapplication.data.db.ShiftsDatabase
 import com.example.shiftstestapplication.data.repository.ShiftsRepository
+import com.example.shiftstestapplication.domain.implementation.AddShiftToListUsecaseImpl
 import com.example.shiftstestapplication.domain.implementation.ShiftsUsecaseImpl
-import com.example.shiftstestapplication.domain.usecase.ShiftRepository
+import com.example.shiftstestapplication.domain.usecase.AddShiftToListUsecase
+import com.example.shiftstestapplication.domain.usecase.ShiftListUsecase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,8 +28,17 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideShiftImpl(shiftsRepository: ShiftsRepository): ShiftRepository = ShiftsUsecaseImpl(shiftsRepository)
+    fun provideShiftImpl(
+        shiftsRepository: ShiftsRepository,
+        ioDispatcher: CoroutineDispatcher
+    ): ShiftListUsecase = ShiftsUsecaseImpl(shiftsRepository, ioDispatcher)
 
+    @Provides
+    @Singleton
+    fun provideAddShiftToListImpl(
+        shiftsRepository: ShiftsRepository,
+        ioDispatcher: CoroutineDispatcher
+    ): AddShiftToListUsecase = AddShiftToListUsecaseImpl(shiftsRepository, ioDispatcher)
 
     @Provides
     @Singleton
@@ -46,7 +57,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRepository(shiftDatabase: ShiftsDatabase): ShiftsRepository = ShiftsRepository(shiftDatabase)
+    fun provideRepository(shiftDatabase: ShiftsDatabase): ShiftsRepository =
+        ShiftsRepository(shiftDatabase)
 
 
     @Provides
