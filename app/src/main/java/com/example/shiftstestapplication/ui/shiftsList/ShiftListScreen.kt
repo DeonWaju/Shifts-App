@@ -26,12 +26,14 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.shiftstestapplication.data.responses.Shift
+import com.example.shiftstestapplication.utils.*
 import kotlinx.coroutines.flow.collect
 
 /**
@@ -111,19 +113,31 @@ fun ShiftItemView(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.Green)
     ) {
         val (name, time) = createRefs()
+
+        val color = when (shift.color) {
+            "red" -> {
+                Color.Red
+            }
+            "blue" -> {
+                Color.Blue
+            }
+            else -> {
+                Color.Green
+            }
+        }
 
         Text(
             text = "${shift.name} " + "(" + shift.role + ")",
             textAlign = TextAlign.Start,
+            color = color,
             modifier = Modifier.constrainAs(name) {
                 start.linkTo(parent.start)
             }
         )
         Text(
-            text = "${shift.start_date}",
+            text = "${shift.start_date.toDayMonthShort()}",
             textAlign = TextAlign.End,
             modifier = Modifier.constrainAs(time) {
                 end.linkTo(parent.end)
@@ -133,3 +147,4 @@ fun ShiftItemView(
     Divider(startIndent = 8.dp, thickness = 1.dp, color = Color.Black)
 
 }
+

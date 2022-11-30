@@ -5,6 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.shiftstestapplication.data.db.entities.ShiftItems
+import com.example.shiftstestapplication.data.responses.Shift
 import com.example.shiftstestapplication.domain.usecase.AddShiftToListUsecase
 import com.example.shiftstestapplication.domain.usecase.ShiftListUsecase
 import com.example.shiftstestapplication.ui.shiftsList.ShiftUiState
@@ -38,4 +40,9 @@ class AddShiftViewModel @Inject constructor(
         }
     }
 
+    fun upsert(shift: ShiftItems) {
+        viewModelScope.launch{
+            addShiftToListUsecase.add(shift)
+        }
+    }
 }

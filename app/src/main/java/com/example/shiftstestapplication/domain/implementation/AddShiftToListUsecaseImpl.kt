@@ -25,9 +25,8 @@ class AddShiftToListUsecaseImpl @Inject constructor(
     private val ioDispatcher: CoroutineDispatcher
 ) : AddShiftToListUsecase {
 
-    override suspend fun add(item: ShiftItems) {
-        return shiftsRepository.upsert(item)
-    }
+    override suspend fun add(item: ShiftItems) = shiftsRepository.upsert(item)
+
 
     override suspend fun getShifts(): Flow<List<Shift>> = flow {
         val shiftList = shiftsRepository.getShifts()

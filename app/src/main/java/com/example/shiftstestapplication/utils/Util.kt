@@ -1,5 +1,6 @@
 package com.example.shiftstestapplication.utils
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.wrapContentSize
@@ -10,45 +11,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by Gideon Olarewaju on 30/11/2022.
  */
 
-
-
-@Composable
-fun <T> Spinner(
-    modifier: Modifier = Modifier,
-    dropDownModifier: Modifier = Modifier,
-    items: List<T>,
-    selectedItem: T,
-    onItemSelected: (T) -> Unit,
-    selectedItemFactory: @Composable (Modifier, T) -> Unit,
-    dropdownItemFactory: @Composable (T, Int) -> Unit,
-) {
-    var expanded: Boolean by remember { mutableStateOf(false) }
-
-    Box(modifier = modifier.wrapContentSize(Alignment.TopStart)) {
-        selectedItemFactory(
-            Modifier
-                .clickable { expanded = true },
-            selectedItem
-        )
-
-        androidx.compose.material.DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            modifier = dropDownModifier
-        ) {
-            items.forEachIndexed { index, element ->
-                DropdownMenuItem(onClick = {
-                    onItemSelected(items[index])
-                    expanded = false
-                }) {
-                    dropdownItemFactory(element, index)
-                }
-            }
-        }
-    }
+@SuppressLint("NewApi")
+private fun convertToCustomFormat(dateStr: String?): String {
+    val utc = TimeZone.getTimeZone("UTC")
+    val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy")
+    val destFormat = SimpleDateFormat("dd-MMM-YYYY HH:mm aa")
+    sourceFormat.timeZone = utc
+    val convertedDate = sourceFormat.parse(dateStr)
+    return destFormat.format(convertedDate)
 }

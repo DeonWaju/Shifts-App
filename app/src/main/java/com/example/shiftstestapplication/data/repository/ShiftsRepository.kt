@@ -31,6 +31,10 @@ class ShiftsRepository @Inject constructor(
         db.shiftsDao().delete(shifts)
     }
 
+    fun isExists(): Boolean {
+        return db.shiftsDao().isExists()
+    }
+
     fun getShifts(): List<Shift> {
         shiftList.clear()
         getData(response)

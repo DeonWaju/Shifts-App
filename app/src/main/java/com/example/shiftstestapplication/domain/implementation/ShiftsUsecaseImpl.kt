@@ -33,6 +33,11 @@ class ShiftsUsecaseImpl @Inject constructor(
         shiftsRepository.delete(item)
     }
 
+    override suspend fun isExists(): Flow<Boolean> = flow{
+        shiftsRepository.isExists()
+        emit(shiftsRepository.isExists())
+    }
+
     override suspend fun getShifts(): Flow<List<Shift>> = flow {
         val shiftList = shiftsRepository.getShifts()
         emit(shiftList)

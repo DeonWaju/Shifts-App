@@ -50,11 +50,11 @@ fun AddShiftScreen(
 ) {
     val shiftState = viewModel.uiState
     val shift = shiftState.shift
-
     val employeeList = shift.map { it.name.capitalize(Locale.ROOT) }.distinct().toList()
     val rolesList = shift.map { it.role.capitalize(Locale.ROOT) }.distinct().toList()
     val colorsList = shift.map { it.color.capitalize(Locale.ROOT) }.distinct().toList()
 
+//    val addShift = viewModel.upsert()
 
     Surface(
         color = MaterialTheme.colors.background,
@@ -190,52 +190,52 @@ fun ReadonlyTextField(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DateTimePicker() {
-    var pickedDate by remember {
+    var pickedDateStart by remember {
         mutableStateOf(LocalDate.now())
     }
-    var pickedTime by remember {
-        mutableStateOf(LocalTime.NOON)
+    var pickedDateEnd by remember {
+        mutableStateOf(LocalDate.now())
     }
-    val formattedDate by remember {
+    val formattedDateStart by remember {
         derivedStateOf {
             DateTimeFormatter
                 .ofPattern("MMM dd yyyy")
-                .format(pickedDate)
+                .format(pickedDateStart)
         }
     }
-    val formattedTime by remember {
+    val formattedDateEnd by remember {
         derivedStateOf {
             DateTimeFormatter
-                .ofPattern("hh:mm")
-                .format(pickedTime)
+                .ofPattern("MMM dd yyyy")
+                .format(pickedDateEnd)
         }
     }
 
-    val dateDialogState = rememberMaterialDialogState()
-    val timeDialogState = rememberMaterialDialogState()
+    val dateDialogStateStart = rememberMaterialDialogState()
+    val dateDialogStateEnd = rememberMaterialDialogState()
 
     Spacer(modifier = Modifier.height(20.dp))
     ReadonlyTextField(
-        value = TextFieldValue(formattedDate),
-        onValueChange = { TextFieldValue(formattedDate) },
-        onClick = { dateDialogState.show() },
+        value = TextFieldValue(formattedDateStart),
+        onValueChange = { TextFieldValue(formattedDateStart) },
+        onClick = { dateDialogStateStart.show() },
         label = {
             Text(text = "Start Date")
         }
     )
     Spacer(modifier = Modifier.height(20.dp))
-
     ReadonlyTextField(
-        value = TextFieldValue(formattedTime),
-        onValueChange = { TextFieldValue(formattedTime) },
-        onClick = { timeDialogState.show() },
+        value = TextFieldValue(formattedDateEnd),
+        onValueChange = { TextFieldValue(formattedDateEnd) },
+        onClick = { dateDialogStateEnd.show() },
         label = {
             Text(text = "End Date")
         }
     )
+    Spacer(modifier = Modifier.height(20.dp))
 
     MaterialDialog(
-        dialogState = dateDialogState,
+        dialogState = dateDialogStateStart,
         buttons = {
             positiveButton(text = "Ok")
             negativeButton(text = "Cancel")
@@ -245,21 +245,21 @@ fun DateTimePicker() {
             initialDate = LocalDate.now(),
             title = "Pick a date"
         ) {
-            pickedDate = it
+            pickedDateStart = it
         }
     }
     MaterialDialog(
-        dialogState = timeDialogState,
+        dialogState = dateDialogStateEnd,
         buttons = {
             positiveButton(text = "Ok")
             negativeButton(text = "Cancel")
         }
     ) {
-        timepicker(
-            initialTime = LocalTime.NOON,
-            title = "Pick a time",
+        datepicker(
+            initialDate = LocalDate.now(),
+            title = "Pick a date"
         ) {
-            pickedTime = it
+            pickedDateEnd = it
         }
     }
 }

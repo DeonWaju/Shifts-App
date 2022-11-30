@@ -19,4 +19,6 @@ interface ShiftsDao {
     @Query("SELECT * FROM ShiftItems")
     fun getAllShiftItems(): List<ShiftItems>
 
+    @Query("SELECT EXISTS(SELECT * FROM ShiftItems)")
+    fun isExists(): Boolean
 }
