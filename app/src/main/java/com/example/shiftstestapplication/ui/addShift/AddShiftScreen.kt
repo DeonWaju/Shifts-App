@@ -230,7 +230,10 @@ fun DateTimePicker(
     ReadonlyTextField(
         value = TextFieldValue(formattedDateStart),
         modifier = Modifier.fillMaxWidth(),
-        onValueChange = { TextFieldValue(formattedDateStart) },
+        onValueChange = {
+            TextFieldValue(formattedDateStart)
+            viewModel.editTitle(formattedDateStart)
+                        },
         onClick = { dateDialogStateStart.show() },
         label = {
             Text(text = "Start Date")
