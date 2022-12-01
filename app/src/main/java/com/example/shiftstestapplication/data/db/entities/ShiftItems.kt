@@ -6,13 +6,13 @@ import java.io.Serializable
 
 @Entity
 open class ShiftItems(
+    @PrimaryKey
+    var id: Int = -1,
+
     var name: String,
     var role: String,
     var startDate: String,
     var endDate: String,
     var color: String,
-){
-    @PrimaryKey(autoGenerate = true)
-    var id: Int? = null
-}
+)
 

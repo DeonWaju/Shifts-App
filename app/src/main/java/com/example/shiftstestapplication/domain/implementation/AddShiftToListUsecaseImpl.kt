@@ -28,7 +28,7 @@ class AddShiftToListUsecaseImpl @Inject constructor(
     override suspend fun add(item: ShiftItems) = shiftsRepository.upsert(item)
 
 
-    override suspend fun getShifts(): Flow<List<Shift>> = flow {
+    override suspend fun getShifts(): Flow<List<ShiftItems>> = flow {
         val shiftList = shiftsRepository.getShifts()
         emit(shiftList)
     }.flowOn(ioDispatcher)

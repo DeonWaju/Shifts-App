@@ -9,5 +9,5 @@ import kotlinx.coroutines.flow.Flow
  */
 interface AddShiftToListUsecase {
     suspend fun add(item: ShiftItems)
-    suspend fun getShifts(): Flow<List<Shift>>
+    suspend fun getShifts(): Flow<List<ShiftItems>>
 }

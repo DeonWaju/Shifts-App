@@ -14,5 +14,5 @@ interface ShiftListUsecase {
 
     suspend fun isExists(): Flow<Boolean>
 
-    suspend fun getShifts(): Flow<List<Shift>>
+    suspend fun getShifts(): Flow<List<ShiftItems>>
 }

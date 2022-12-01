@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.shiftstestapplication.data.db.entities.ShiftItems
 import com.example.shiftstestapplication.data.responses.Shift
 import com.example.shiftstestapplication.utils.*
 import kotlinx.coroutines.flow.collect
@@ -92,7 +93,7 @@ fun ShiftScreenAppbar(
 @Composable
 fun ShiftListView(
     navController: NavController,
-    shiftList: List<Shift>
+    shiftList: List<ShiftItems>
 ) {
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
@@ -107,7 +108,7 @@ fun ShiftListView(
 
 @Composable
 fun ShiftItemView(
-    shift: Shift
+    shift: ShiftItems
 ) {
 
     ConstraintLayout(
@@ -137,7 +138,7 @@ fun ShiftItemView(
             }
         )
         Text(
-            text = "${shift.start_date.toDayMonthShort()}",
+            text = "${shift.startDate.toNewDate()}",
             textAlign = TextAlign.End,
             modifier = Modifier.constrainAs(time) {
                 end.linkTo(parent.end)

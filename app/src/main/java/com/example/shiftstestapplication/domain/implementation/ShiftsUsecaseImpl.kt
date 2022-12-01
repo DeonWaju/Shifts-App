@@ -38,7 +38,7 @@ class ShiftsUsecaseImpl @Inject constructor(
         emit(shiftsRepository.isExists())
     }
 
-    override suspend fun getShifts(): Flow<List<Shift>> = flow {
+    override suspend fun getShifts(): Flow<List<ShiftItems>> = flow {
         val shiftList = shiftsRepository.getShifts()
         emit(shiftList)
     }.flowOn(ioDispatcher)

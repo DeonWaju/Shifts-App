@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 
 data class ShiftUiState(
-    val shift: List<Shift> = emptyList()
+    val shift: List<ShiftItems> = emptyList()
 )
 
 @HiltViewModel

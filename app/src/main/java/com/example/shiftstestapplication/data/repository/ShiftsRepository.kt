@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -20,11 +21,19 @@ class ShiftsRepository @Inject constructor(
     private val db: ShiftsDatabase
 ) {
     private val response = Json.decodeFromString<ShiftsList>(shiftsJson)
-    private val shiftList = mutableListOf<Shift>()
 
 
     fun upsert(shifts: ShiftItems) {
-        db.shiftsDao().upsert(shifts)
+        db.shiftsDao().upsert(
+            ShiftItems(
+                id = Random().nextInt(),
+                name = shifts.name,
+                startDate = shifts.startDate,
+                endDate = shifts.endDate,
+                color = shifts.color,
+                role = shifts.role
+            )
+        )
     }
 
     fun delete(shifts: ShiftItems) {
@@ -35,18 +44,16 @@ class ShiftsRepository @Inject constructor(
         return db.shiftsDao().isExists()
     }
 
-    fun getShifts(): List<Shift> {
-        shiftList.clear()
+    fun getShifts(): List<ShiftItems> {
         getData(response)
-        return shiftList
+        return db.shiftsDao().getAllShiftItems()
     }
 
     private fun getData(response: ShiftsList) {
         response.shifts.map { shift ->
-            shiftList.addAll(listOf(shift))
-            db.shiftsDao().deleteAll()
             db.shiftsDao().upsert(
                 item = ShiftItems(
+                    id = shift.id,
                     name = shift.name,
                     role = shift.role,
                     startDate = shift.start_date,
@@ -56,6 +63,4 @@ class ShiftsRepository @Inject constructor(
             )
         }
     }
-
-
 }

@@ -11,8 +11,11 @@ import com.example.shiftstestapplication.domain.usecase.AddShiftToListUsecase
 import com.example.shiftstestapplication.domain.usecase.ShiftListUsecase
 import com.example.shiftstestapplication.ui.shiftsList.ShiftUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
+import kotlin.random.Random
 
 /**
  * Created by Gideon Olarewaju on 30/11/2022.
@@ -20,11 +23,28 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddShiftViewModel @Inject constructor(
-    private val addShiftToListUsecase: AddShiftToListUsecase
+    private val addShiftToListUsecase: AddShiftToListUsecase,
+    private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     var uiState by mutableStateOf(ShiftUiState(emptyList()))
         private set
+
+    var name by mutableStateOf("")
+        private set
+
+    var role by mutableStateOf("")
+        private set
+
+    var color by mutableStateOf("")
+        private set
+
+    var startDate by mutableStateOf("")
+        private set
+
+    var endDate by mutableStateOf("")
+        private set
+
 
     init {
         getShifts()
@@ -40,9 +60,18 @@ class AddShiftViewModel @Inject constructor(
         }
     }
 
-    fun upsert(shift: ShiftItems) {
+    fun upsert() {
         viewModelScope.launch{
-            addShiftToListUsecase.add(shift)
+            addShiftToListUsecase.add(
+                ShiftItems(
+                    Random.nextInt(),
+                    name = name,
+                    role = role,
+                    startDate = startDate,
+                    endDate = endDate,
+                    color = color,
+                )
+            )
         }
     }
 }

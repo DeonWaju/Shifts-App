@@ -63,22 +63,27 @@ fun AddShiftScreen(
         Column {
             AddShiftScreenAppbar(navController = navController)
 
-            DateTimePicker()
-            Spacer(modifier = Modifier.height(20.dp))
-            DropDownMenu(
-                optionList = employeeList,
-                label = "Employee"
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            DropDownMenu(
-                optionList = rolesList,
-                label = "Role"
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-            DropDownMenu(
-                optionList = colorsList,
-                label = "Color"
-            )
+            Box(modifier = Modifier.padding(16.dp)) {
+                Column {
+
+                    DateTimePicker()
+                    Spacer(modifier = Modifier.height(20.dp))
+                    DropDownMenu(
+                        optionList = employeeList,
+                        label = "Employee"
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    DropDownMenu(
+                        optionList = rolesList,
+                        label = "Role"
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    DropDownMenu(
+                        optionList = colorsList,
+                        label = "Color"
+                    )
+                }
+            }
         }
     }
 }
@@ -172,7 +177,7 @@ fun ReadonlyTextField(
     label: @Composable () -> Unit
 ) {
     Box {
-        TextField(
+        OutlinedTextField(
             value = value,
             onValueChange = onValueChange,
             modifier = modifier,
@@ -189,7 +194,10 @@ fun ReadonlyTextField(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DateTimePicker() {
+fun DateTimePicker(
+    viewModel: AddShiftViewModel = hiltViewModel()
+) {
+
     var pickedDateStart by remember {
         mutableStateOf(LocalDate.now())
     }
@@ -203,6 +211,10 @@ fun DateTimePicker() {
                 .format(pickedDateStart)
         }
     }
+    var start_date by remember {
+        mutableStateOf(viewModel.startDate)
+    }
+    start_date = formattedDateStart
     val formattedDateEnd by remember {
         derivedStateOf {
             DateTimeFormatter
@@ -217,6 +229,7 @@ fun DateTimePicker() {
     Spacer(modifier = Modifier.height(20.dp))
     ReadonlyTextField(
         value = TextFieldValue(formattedDateStart),
+        modifier = Modifier.fillMaxWidth(),
         onValueChange = { TextFieldValue(formattedDateStart) },
         onClick = { dateDialogStateStart.show() },
         label = {
@@ -226,13 +239,13 @@ fun DateTimePicker() {
     Spacer(modifier = Modifier.height(20.dp))
     ReadonlyTextField(
         value = TextFieldValue(formattedDateEnd),
+        modifier = Modifier.fillMaxWidth(),
         onValueChange = { TextFieldValue(formattedDateEnd) },
         onClick = { dateDialogStateEnd.show() },
         label = {
             Text(text = "End Date")
         }
     )
-    Spacer(modifier = Modifier.height(20.dp))
 
     MaterialDialog(
         dialogState = dateDialogStateStart,
