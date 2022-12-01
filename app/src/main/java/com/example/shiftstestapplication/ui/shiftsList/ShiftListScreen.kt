@@ -1,65 +1,55 @@
 package com.example.shiftstestapplication.ui.shiftsList
 
 import android.content.Context
-import android.widget.Toast
-import androidx.compose.foundation.background
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.shiftstestapplication.data.db.entities.ShiftItems
 import com.example.shiftstestapplication.data.responses.Shift
-import com.example.shiftstestapplication.utils.*
-import kotlinx.coroutines.flow.collect
+import com.example.shiftstestapplication.utils.convertToCustomFormat
+import com.example.shiftstestapplication.utils.toDateStyle
+import com.example.shiftstestapplication.utils.toFriendlyDate
+import com.example.shiftstestapplication.utils.toFriendlyDateString
+
 
 /**
  * Created by Gideon Olarewaju on 29/11/2022.
  */
 
-
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ShiftsListScreen(
     navController: NavController,
     viewModel: ShiftsListViewModel = hiltViewModel()
 ) {
-    val shiftState = viewModel.uiState
-
+    val shiftState: ShiftUiState = remember { viewModel.uiState }
     Surface(
         color = MaterialTheme.colors.background,
         modifier = Modifier.fillMaxSize()
     ) {
-
         Column {
             ShiftScreenAppbar(navController = navController)
-            Spacer(modifier = Modifier.height(20.dp))
-            ShiftListView(navController, shiftState.shift)
+            Column (modifier = Modifier.padding(16.dp)){
+                Spacer(modifier = Modifier.height(20.dp))
+                ShiftListView(navController, shiftState.shift)
+            }
         }
-
     }
 }
 
@@ -90,15 +80,16 @@ fun ShiftScreenAppbar(
     )
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ShiftListView(
     navController: NavController,
-    shiftList: List<ShiftItems>
+    shiftList: List<Shift>
 ) {
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
         modifier = Modifier
-            .border(width = 4.dp, color = Color.Black, shape = RectangleShape)
+            .border(width = 4.dp, color = Color.Black, shape = RoundedCornerShape(20.dp))
     ) {
         items(shiftList) {
             ShiftItemView(it)
@@ -106,11 +97,11 @@ fun ShiftListView(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ShiftItemView(
-    shift: ShiftItems
+    shift: Shift
 ) {
-
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
@@ -129,6 +120,13 @@ fun ShiftItemView(
             }
         }
 
+        val date = "${shift.start_date}"
+        val dateLength = if (date.length < 11){
+           date
+        } else{
+            date.take(11)
+        }
+
         Text(
             text = "${shift.name} " + "(" + shift.role + ")",
             textAlign = TextAlign.Start,
@@ -138,7 +136,7 @@ fun ShiftItemView(
             }
         )
         Text(
-            text = "${shift.startDate.toNewDate()}",
+            text = dateLength,
             textAlign = TextAlign.End,
             modifier = Modifier.constrainAs(time) {
                 end.linkTo(parent.end)
@@ -146,6 +144,4 @@ fun ShiftItemView(
         )
     }
     Divider(startIndent = 8.dp, thickness = 1.dp, color = Color.Black)
-
 }
-

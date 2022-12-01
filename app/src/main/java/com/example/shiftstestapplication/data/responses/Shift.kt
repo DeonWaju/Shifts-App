@@ -4,7 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Shift(
-    val id: Int,
     val name: String,
     val color: String,
     val role: String,

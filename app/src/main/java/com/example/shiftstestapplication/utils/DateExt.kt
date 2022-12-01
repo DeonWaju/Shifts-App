@@ -1,8 +1,14 @@
 package com.example.shiftstestapplication.utils
 
+import android.os.Build
 import android.text.format.DateUtils
+import androidx.annotation.RequiresApi
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
@@ -148,227 +154,25 @@ fun Calendar.sameDay(other: Calendar): Boolean {
     )) && (this.get(Calendar.YEAR) == other.get(Calendar.YEAR))
 }
 
-fun String.toSlashedDateNoMilli(): String {
-    val date = this.toDate()
-    return SimpleDateFormat(slashPattern, Locale.getDefault()).format(date)
+// convert local date to 2018-04-20 9:00:00 -08:00
+@RequiresApi(Build.VERSION_CODES.O)
+fun LocalDate.toDateTime(): String {
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+    return this.atStartOfDay().format(formatter)
 }
 
-fun String.toMonthDateNoMilli(): String {
-    val date = this.toDate()
-    return SimpleDateFormat(monthPattern, Locale.getDefault()).format(date)
-}
-
-fun String.toFullMonthDateNoMilli(): String {
-    val date = this.toDate()
-    return SimpleDateFormat(monthFullPattern, Locale.getDefault()).format(date)
-}
-
-fun String.toDBStartDate(): String {
-    val date = this.toDate()
-    return SimpleDateFormat("yyyy'-'MM'-'dd'T'00':'00", Locale.getDefault()).format(date)
-}
-
-fun String.toDBEndDate(): String {
-    val date = this.toDate()
-    return SimpleDateFormat("yyyy'-'MM'-'dd'T'23':'59", Locale.getDefault()).format(date)
-}
-
-fun String.toTimeInHours(): String {
-    val date = this.toMilliDate()
-    val hrly = SimpleDateFormat("HH:mm", Locale.getDefault()).format(date)
-    return String.format("%s Hrs", hrly)
-}
-
-fun String.toSlashedDate(): String {
-    val date = this.toMilliDate()
-    return SimpleDateFormat(slashPattern, Locale.getDefault()).format(date)
-}
-
-fun String.toFriendlyDateWithTime(): String {
-    val date = this.toMilliDate()
-    return SimpleDateFormat("EEE, MMM dd, yyyy hh:mm a", Locale.getDefault()).format(date)
-}
-
-fun String.toSlashedFriendlyDateWithTime(): String {
-    val date = this.toMilliDate()
-    return SimpleDateFormat("EEE dd/MMM, yyyy hh:mm a", Locale.getDefault()).format(date)
-}
-
-fun Long.toTractionDateFormat(): String {
-    val pattern = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS"
-    val date = Date(this)
-    val format = SimpleDateFormat(pattern, Locale.getDefault())
-    return format.format(date)
-}
-
-fun Long.toTractionDateFormatWithZ(): String {
-    val pattern = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS'Z'"
-    val date = Date(this)
-    val format = SimpleDateFormat(pattern, Locale.getDefault())
-    return format.format(date)
-}
-
-fun String.toSalesDetailFormat(): String {
-    val date = this.toMilliDate()
-    return SimpleDateFormat("hh:mm a dd/MM/yyyy", Locale.getDefault()).format(date)
-}
-
-fun Long.toHyphenDateString(): String {
-    val pattern = "yyyy-MM-dd"
-    val date = Date(this)
-    val format = SimpleDateFormat(pattern, Locale.getDefault())
-    return format.format(date)
-}
-
-fun Long.toSimpleDateString(): String {
-    val pattern = "MMM dd, yyyy"
-    val date = Date(this)
-    val format = SimpleDateFormat(pattern, Locale.getDefault())
-    return format.format(date)
-}
-
-fun String.toSimpleDateString(): String {
-    val pattern = "MMM dd, yyyy"
-    val date = this.toDate()
-    return SimpleDateFormat(pattern, Locale.getDefault()).format(date)
-}
-
-fun Date.toTimeAgo(): String {
-    val calendar = Calendar.getInstance()
-    calendar.time = this
-
-    val year = calendar.get(Calendar.YEAR)
-    val month = calendar.get(Calendar.MONTH)
-    val day = calendar.get(Calendar.DAY_OF_MONTH)
-    val hour = calendar.get(Calendar.HOUR_OF_DAY)
-    val minute = calendar.get(Calendar.MINUTE)
-
-    val currentCalendar = Calendar.getInstance()
-
-    val currentYear = currentCalendar.get(Calendar.YEAR)
-    val currentMonth = currentCalendar.get(Calendar.MONTH)
-    val currentDay = currentCalendar.get(Calendar.DAY_OF_MONTH)
-    val currentHour = currentCalendar.get(Calendar.HOUR_OF_DAY)
-    val currentMinute = currentCalendar.get(Calendar.MINUTE)
-
-    return if (year < currentYear) {
-        val interval = currentYear - year
-        if (interval == 1) "$interval year ago" else "$interval years ago"
-    } else if (month < currentMonth) {
-        val interval = currentMonth - month
-        if (interval == 1) "$interval month ago" else "$interval months ago"
-    } else if (day < currentDay) {
-        val interval = currentDay - day
-        if (interval == 1) "$interval day ago" else "$interval days ago"
-    } else if (hour < currentHour) {
-        val interval = currentHour - hour
-        if (interval == 1) "$interval hour ago" else "$interval hours ago"
-    } else if (minute < currentMinute) {
-        val interval = currentMinute - minute
-        if (interval == 1) "$interval minute ago" else "$interval minutes ago"
-    } else {
-        "a moment ago"
-    }
-}
-
-fun String.elapsedDays(): Long {
-    val calendar = Calendar.getInstance()
-    calendar.time = this.toDate()
-
-    return TimeUnit.MILLISECONDS.toDays(Date().time - calendar.timeInMillis)
-}
-
-fun String.toMilliDateZ(): Date {
-    return SimpleDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS ", Locale.getDefault()).parse(this)
-}
-
-fun String.simpleStringToDate(): Date {
-    return SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).parse(this)
-}
-
-fun Long.toDayMonthInFull(): String {
-    return SimpleDateFormat("dd MMMM", Locale.getDefault()).format(Date(this))
-}
-
-fun Long.toDDMMMYYYY(): String {
-    return SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(Date(this))
-}
-
-
-fun Long.toDayMonthYear(): String {
-    return SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(Date(this))
-}
-
-fun String.toDayMonthInFull(): String {
-    return SimpleDateFormat("dd MMMM", Locale.getDefault()).format(this.toDate())
-}
-
-fun String.toDayMonthShort(): String {
-    return SimpleDateFormat("dd MMM", Locale.getDefault()).format(this.toDate())
-}
-
-fun Long.toDayMonthYearInFull(): String {
-    return SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(Date(this))
-}
-
-fun String.toMonthDayYearInFull(): String { //2020-11-20T00:50:09.14+01:00
-    return SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault()).format(this.toDate())
-}
-
-fun Long.toDottedDDMMYYYY(): String {
-    return SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date(this))
-}
-
-fun String.dayMonthToFriendlyDate(): String {
-    return try {
-        val date = SimpleDateFormat("dd'-'MM", Locale.getDefault()).parse(this)
-        date.time.toDayMonthInFull()
-    } catch (ex: Exception) {
-        "N/A"
-    }
-}
-
-fun String.dayMonthYearToDate(): String {
-    return try {
-        val date = SimpleDateFormat(commonDateFormat, Locale.getDefault()).parse(this)
-        date.time.toDayMonthYear()
-    } catch (ex: Exception) {
-        "N/A"
-    }
-}
-
-fun Long.toInvoiceCreateDate(): String {
-    val date = Date(this) // "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
-    return SimpleDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'", Locale.getDefault()).format(date)
-}
-
-fun Date.toDayMonthString(): String {
-    return SimpleDateFormat("dd'-'MM", Locale.getDefault()).format(this)
-}
-
-
-fun String.timeAgo(): String {
-    return DateUtils.getRelativeTimeSpanString(
-        this.toMilliDate().time,
-        Calendar.getInstance().timeInMillis,
-        DateUtils.SECOND_IN_MILLIS,
-        DateUtils.FORMAT_ABBREV_ALL
-    ).toString()
-}
-
-fun String.toNewDate(dateFormat: String = "yyyy-MM-dd HH:mm:ss", timeZone: TimeZone = TimeZone.getTimeZone("UTC")): Date {
-    val parser = SimpleDateFormat(dateFormat, Locale.getDefault())
-    parser.timeZone = timeZone
-    return parser.parse(this)
-}
-
-fun String.toNewDateStyle(dateFormat: String = "yyyy-MM-dd"): Date {
-    val parser = SimpleDateFormat(dateFormat, Locale.getDefault())
-    return parser.parse(this)
-}
-
-fun Date.formatTo(dateFormat: String, timeZone: TimeZone = TimeZone.getDefault()): String {
-    val formatter = SimpleDateFormat(dateFormat, Locale.getDefault())
-    formatter.timeZone = timeZone
-    return formatter.format(this)
+// convert dateTime to “Mon, April 12 9-2 PM”
+@RequiresApi(Build.VERSION_CODES.O)
+fun String.toDateStyle(): String {
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val date = LocalDateTime.parse(this, formatter)
+    val day = date.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.getDefault())
+    val month = date.month.getDisplayName(TextStyle.FULL, Locale.getDefault())
+    val dayOfMonth = date.dayOfMonth
+    val startHour = date.hour
+    val startMinute = date.minute
+    val endHour = date.hour + 5
+    val endMinute = date.minute
+    val dayShort = day.substring(0, 3)
+    return "$dayShort, $month $dayOfMonth ${startMinute - endHour} ${if (startHour > 12) "PM" else "AM"}"
 }

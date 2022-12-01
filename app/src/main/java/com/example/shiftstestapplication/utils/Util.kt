@@ -1,6 +1,9 @@
 package com.example.shiftstestapplication.utils
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.wrapContentSize
@@ -19,11 +22,24 @@ import java.util.*
  */
 
 @SuppressLint("NewApi")
-private fun convertToCustomFormat(dateStr: String?): String {
+fun convertToCustomFormat(dateStr: String?): String {
     val utc = TimeZone.getTimeZone("UTC")
     val sourceFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy")
     val destFormat = SimpleDateFormat("dd-MMM-YYYY HH:mm aa")
     sourceFormat.timeZone = utc
     val convertedDate = sourceFormat.parse(dateStr)
     return destFormat.format(convertedDate)
+}
+
+
+fun showToast(context: Context, msg: String) {
+    Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+}
+
+fun Any.log() {
+    Log.d("INFORMATION", this.toString())
+}
+
+fun Any.print() {
+    println(this)
 }
